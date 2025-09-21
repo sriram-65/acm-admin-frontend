@@ -97,6 +97,20 @@
        }
     }
 
+    window.onload = function() {
+    fetch(`${API_URL_AUTH}/me`, {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.Success) {
+            // User is already logged in, redirect to dashboard
+            window.location.href = '/gallery';
+        }
+    });
+}
+
 
 
     
