@@ -97,19 +97,7 @@
        }
     }
 
-window.onload = function() {
-    fetch(`${API_URL_AUTH}/me`, {
-        method: "GET",
-        credentials: "include"
-    })
-    .then(res => res.json())
-    .then(data => {
-        if(data.Success) {
-          
-            window.location.href = '/';
-        }
-    });
-}
+
 
     
 
