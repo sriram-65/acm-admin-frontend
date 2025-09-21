@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <nav>
+     <div class="logo">
+        <a href="#">NPR@ACM</a>
+     </div>
+    </nav>
+   
+    <section id="upload">
+     <div class="container">
+    <div class="main-text">
+      <h1>Upload Your Gallery</h1>
+      <p>From Gallery Uploading <button class="btn btn-dark" onclick="window.history.back()">Back</button></p>
+    </div>
+
+    <form >
+        
+         <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+            <div class="eform">
+                   <input type="text" class="form-control" id="title" placeholder="Enter event title" required>
+            </div>
+
+        </div>
+
+        
+         <div class="mb-3">
+                    <label for="title" class="form-label">Heading 1</label>
+            <div class="eform">
+                   <input type="text" class="form-control" id="Heading1" placeholder="Enter Heading1" required>
+            </div>
+        </div>
+
+        
+         <div class="mb-3">
+                    <label for="title" class="form-label">Heading 2</label>
+            <div class="eform">
+                   <input type="text" class="form-control" id="Heading2" placeholder="Enter Heading2" required>
+            </div>
+
+        </div>
+           
+
+        
+         <div class="mb-3">
+                    <label for="title" class="form-label">Heading 3</label>
+            <div class="eform">
+                   <input type="text" class="form-control" id="Heading3" placeholder="Enter Heading3" required>
+            </div>
+
+        </div>
+
+        
+        
+        <div class="mb-3">
+            <label for="caption" class="form-label">caption</label>
+            <div class="eform">
+                   <textarea class="form-control" id="caption" name="description" rows="4" placeholder="Enter event description" required></textarea>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description 1</label>
+            <div class="eform">
+                   <textarea class="form-control" id="description1" name="description" rows="4" placeholder="Enter Gallery description 1" required></textarea>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description 2</label>
+            <div class="eform">
+                   <textarea class="form-control" id="description2" name="description" rows="4" placeholder="Enter Gallery description 2" required></textarea>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description 3</label>
+            <div class="eform">
+                   <textarea class="form-control" id="description3" name="description" rows="4" placeholder="Enter Gallery description 3" required></textarea>
+            </div>
+        </div>
+
+       
+        
+
+      
+        <div class="mb-3">
+            <label for="img" class="form-label">Gallery Image <small class="text-muted">(Upload Gallery Images Upto 3)</small></label>
+            <div class="eform">
+            <input class="form-control" type="file" multiple id="img" name="img" accept="image/*">
+            </div>
+        </div>
+
+        
+        
+        
+        <button type="button" class="btn btn-primary" id="submit_btn">Add Gallery</button>
+
+    </form>
+
+    <br>
+    <br>
+      
+   </div>
+    </section>
+  
+</body>
+</html>
+<script>
+    let API_URL = '{{API}}'
+    let title = document.getElementById("title")
+    let caption = document.getElementById("caption")
+    let head1 = document.getElementById("Heading1")
+    let head2 = document.getElementById("Heading2")
+    let head3 = document.getElementById("Heading3")
+    let des1 = document.getElementById("description1")
+    let des2 = document.getElementById("description2")
+    let des3 = document.getElementById("description3")
+    let img = document.getElementById("img")
+   
+ 
+    let submit_btn = document.getElementById("submit_btn")
+
+    submit_btn.onclick = function(){
+        Upload_Gallery().then(data=>{
+            
+            if(data){
+                if(data.Success==true){
+                   ShowMsg(true , data.msg)
+
+                   submit_btn.disabled = false
+
+                   let count = 5
+                   let x = setInterval(function(){
+                      count=count-1
+                      if(count==0){
+                        clearInterval(x)
+                        window.location.href='/gallery'
+                      }
+
+                      submit_btn.innerText = `Gallery Uploaded ${count}`
+                   } , 1000)
+
+                }
+                else{
+                    ShowMsg(false , data.Error)
+                }
+            }
+        })
+    }
+
+    function ShowMsg(status , msg){
+       if(status==true){
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: msg,
+            showConfirmButton: false,
+            timer: 2500
+        });
+        submit_btn.disabled = false
+       }
+       else if(status===false){
+         Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: msg,
+        });
+           submit_btn.disabled = false
+       }
+       else{
+        Swal.fire({
+            icon: "error",
+            title: "Server Error",
+            text: "Server is Busy Pls Try Again Later !",
+        });
+           submit_btn.disabled = false
+       }
+       
+    }
+
+    function Upload_Gallery(){
+      let payload = new FormData()
+     
+      payload.append("title" , title.value)
+      payload.append("caption" , caption.value)
+      payload.append("heading1" , head1.value)
+      payload.append("heading2" , head2.value)
+      payload.append("heading3" , head3.value)
+      payload.append("des1" , des1.value)
+      payload.append("des2" , des2.value)
+      payload.append("des3" , des3.value)
+     
+      Array.from(img.files).forEach((file)=>{
+                payload.append("imgs" , file)
+      })
+
+      
+      submit_btn.disabled = true
+
+      return fetch(`${API_URL}/api/gallery/upload-gallery` , {
+        method:"POST",
+        body:payload
+      }).then(res=>res.json()).catch(e=>{
+        ShowMsg('se' , 'server error')
+      })
+    }
+</script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nata+Sans:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+    body{
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    nav .logo{
+        margin-left: 20px;
+    }
+
+    nav .logo a{
+        font-size: 25px;
+        text-decoration: none;
+        color:#01015a;
+        font-weight: 800;
+        font-style: italic;
+    }
+    .main-text{
+        text-align: center;
+    }
+</style>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter into an Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    
+    <div class="main">
+       
+      <form>
+        <h1>Add Acm Credentials</h1>
+       <p class="text-muted">To Visit Dashboard</p>
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="text" id="password" placeholder="Enter Password">
+        <button type="button" id="sub" class="btn btn-dark">Submit</button>
+        <div id="error">
+        </div>
+      </form>
+    </div>
+
+</body>
+</html>
+<style>
+    body{
+        background-color: aliceblue;
+    }
+    form{
+        width:100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    form input{
+        margin-bottom: 30px;
+        width:40%;
+        padding:10px 10px 10px;
+        border:1px solid black;
+        outline: none;
+    }
+    
+</style>
+<script>
+    let API_URL_AUTH = 'http://localhost:5000/api/auth'
+    let username = document.getElementById("username")
+    let password = document.getElementById("password")
+    let error = document.getElementById("error")
+    let sub = document.getElementById("sub")
+
+    sub.onclick = function(){
+        sub.disabled = true
+        Get_Response(username.value , password.value)
+    }
+
+    function Authenticate(username , password){
+        return fetch(`${API_URL_AUTH}/user` , {
+            method:"POST" ,
+            credentials: 'include',
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({username:username , password:password})
+        }).then(res=> res.json()).catch(e=>{
+            GetResponseAndMark("Connection To The Server is Falied Pls Try Again" , "red")
+
+            sub.disabled = false
+        })
+    }
+
+    function Get_Response(duser , dpass){
+        Authenticate(duser , dpass).then(data=>{
+            if(data.Success===true){
+               GetResponseAndMark(data.msg  , 'green' , true)
+            }
+            else{
+                sub.disabled = false
+                GetResponseAndMark(data.Error , 'red' , false)
+            }
+        })
+    }
+
+    function GetResponseAndMark(msg , color , status=false){
+       error.innerHTML = msg
+       error.style.color = color
+       username.value=''
+       password.value=''
+       
+       if(status==true){
+          setTimeout(()=>{
+            window.location.href = '/'
+          } , 1500)
+       }
+    }
+
+    
+
+   
+</script>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page @NPR</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav id="navbar" class="navbar">
+        <div class="logo">
+            <a href="/">NPR@ACM</a>
+        </div>
+        <div class="links">
+            <a href="/">Events</a>
+            <a href="/gallery">Gallery</a>
+            <a href="/outreach">OutReach</a>
+            <a href="/recent">Recent Events</a>
+            <a href="/logout">Log Out as Admin</a>
+        </div>
+    </nav>
+
+    <section id="events">
+       <div class="container">
+            <div class="main-text">
+                <h1 class="text-center">These are the List of Recent-Events</h1> 
+                <p class="text-muted text-center">Click Here To Upload <a href="/upload/recent" class="text-black-50">Upload Recent-Events</a></p>
+            </div>
+        <div class="row">
+            
+        </div>
+    </div>
+    </section>
+    
+    
+    <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalTitle">Event Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 order-md-2 text-center mb-3 mb-md-0">
+                            <img id="modalImg" class="img-fluid rounded" alt="Event Image" style="max-height: 200px;">
+                            <div class="mt-2">
+                                <small id="modalTime" class="text-muted"><i class="fas fa-clock me-1"></i> <span id="timeText"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-6 order-md-1">
+                            <h3 id="modalTitle" class="text-primary mb-3"></h3>
+                            <div class="event-details">
+                                <div class="detail-item mb-2">
+                                    <i class="fas fa-calendar-day text-primary me-2"></i>
+                                    <span id="modalDate"></span>
+                                </div>
+                                <div class="detail-item mb-3">
+                                    <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                    <span id="modalLoc"></span>
+                                </div>
+                                <div class="description-container">
+                                    <h6 class="text-muted">Description:</h6>
+                                    <p id="modalDescription" class="text-muted"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" >
+                    <button class="btn btn-danger" id="eedit">
+                        <i class="fas fa-edit me-1"></i> Edit
+                    </button>
+                    <button class="btn btn-warning" id="edel">
+                        <i class="fas fa-trash-alt me-1"></i> Delete
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nata+Sans:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+    body{
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+    nav{
+        width:100%;
+        height: 65px;
+        box-shadow: 1px 1px 0px black;
+    }
+    nav .logo{
+        margin-left: 20px;
+    }
+
+    nav .logo a{
+        font-size: 25px;
+        text-decoration: none;
+        color:#01015a;
+        font-weight: 800;
+        font-style: italic;
+    }
+    nav .links{
+        display: flex;
+        gap:40px;
+        margin-right: 20px;
+    }
+
+    nav .links a{
+        text-decoration: none;
+        font-size: 20px;
+        font-weight: 600;
+        color: #01015a;
+    }
+
+    nav .links a:hover{
+        color: rgb(245, 7, 7);
+    }
+    #events{
+        margin-top: 50px;
+    }
+    
+    /* Modal customization */
+    .modal-content {
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        border: none;
+    }
+    
+    .detail-item {
+        display: flex;
+        align-items: center;
+    }
+    
+    .description-container {
+        background-color: #f8f9fa;
+        padding: 12px;
+        border-radius: 8px;
+        border-left: 4px solid #0d6efd;
+    }
+</style>
+
+<script>
+
+    let API = '{{API}}'
+
+    function Get_Events(){
+        return fetch(`${API}/api/recent/`).then(res => res.json())
+    }
+
+    let row = document.querySelector(".row")
+
+    function LOAD_ALL_EVENTS(){
+         row.innerHTML = ''
+    Get_Events().then((data) => {
+
+        if(data.Success === true){
+            data.Events.forEach(event => {
+                
+                let col = document.createElement("div")
+                col.className = "col-md-4 mb-4"
+               
+                
+                let card = document.createElement("div")
+                card.className = "card shadow-sm h-100"
+
+                let cardBody = document.createElement("div")
+                cardBody.className = "card-body"
+
+                let title = document.createElement("h5")
+                title.className = "card-title fw-bold"
+                title.innerText = event.title
+
+                let des = document.createElement("p")
+                des.className = "card-text text-muted"
+                des.innerText = event.des
+
+                let date = document.createElement("p")
+                date.className = "card-text"
+                date.innerHTML = `<small class="text-secondary">${event.date}</small>`
+                
+                let btn = document.createElement("a")
+                btn.className = "btn btn-primary mt-auto"
+                btn.innerText = "Read More"
+                btn.setAttribute("data-bs-toggle", "modal")
+                btn.setAttribute("data-bs-target", "#eventModal")
+                btn.onclick = function(){
+                  showPopup(event)
+                }
+              
+                cardBody.appendChild(title)
+                cardBody.appendChild(des)
+                cardBody.appendChild(date)
+                cardBody.appendChild(btn)
+                card.appendChild(cardBody)
+                
+                col.appendChild(card)
+
+                
+                row.appendChild(col)
+            })
+        }
+    })
+
+    }
+    
+    let ID;
+    function showPopup(Odata){
+        if(Odata){
+            document.getElementById('modalTitle').innerText = Odata.title;
+            document.getElementById('modalDescription').innerText = Odata.des;
+            document.getElementById('modalLoc').innerText = Odata.location;
+            document.getElementById('modalDate').innerText = Odata.date;
+            document.getElementById('timeText').innerText = Odata.time;
+            document.getElementById('modalImg').src = Odata.img_url;
+            ID=Odata._id
+        } else {
+            alert("Invalid data");
+        }
+    }
+
+    function EditEvent(name , id){
+       window.location.href = `${name}/${id}`
+    }
+
+     let edel = document.getElementById("edel")
+    function Delete_Event(id){
+        edel.disabled=true
+        edel.innerHTML = 'Deleting...'
+        fetch(`${API}/api/recent/delete/${id}` , {method:"DELETE"}).then(res=>res.json()).then(data=>{
+            if(data.Success===true){
+                LOAD_ALL_EVENTS()
+                var myModalEl = document.getElementById('eventModal');
+                var modal = bootstrap.Modal.getInstance(myModalEl);
+                modal.hide()
+                
+                edel.disabled=false
+            }
+            else{
+                alert("Failed to Delete the Event ! Pls Try Again Later")
+            }
+        })
+    }
+    let eedit = document.getElementById("eedit")
+    eedit.onclick = function(){
+        EditEvent("update-recent" , ID)
+    }
+
+    
+    edel.onclick = function(){
+
+        Delete_Event(ID)
+    }
+
+        let routes = {
+        "Events":"/",
+        "Gallery":"/gallery",
+        "OutReach":"/outreach",
+        "Recent Events":"/recent"
+    }
+
+    let links = document.querySelector(".links")
+    let a = links.querySelectorAll("a")
+
+    a.forEach(as=>{
+        
+            console.log(as.innerText)
+            if(window.location.pathname == routes[as.innerText]){
+                as.style.color = "rgb(245, 7, 7)"
+                
+            }
+    })
+    window.addEventListener("DOMContentLoaded",LOAD_ALL_EVENTS);
+</script>
