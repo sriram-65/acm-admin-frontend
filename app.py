@@ -1,6 +1,7 @@
 from flask import Flask , redirect , render_template , session
 from dotenv import load_dotenv
 import os
+import requests
 
 
 app = Flask(__name__)
@@ -23,11 +24,19 @@ Edit_Routes={
     "update-gallery":"Egallery.html"
 }
 
+def check():
+    res = requests.get(f'{API_URL}/api/auth/me')
+    data = res.json()
+    if(data.Success):
+        return True
+    else:
+        return False
+
+
 @app.route('/')
 def Home():
-    auth = session.get("isauth")
-    if auth:
-      
+    auth = check()
+    if auth==True:
         return render_template("main.html"  ,   API = API_URL)
     else:
         return redirect("/acm")
