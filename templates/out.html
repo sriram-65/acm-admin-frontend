@@ -10,18 +10,12 @@
 </head>
 <body>
 
-  <nav id="navbar" class="navbar">
-    <div class="logo">
-      <a href="/">NPR@ACM</a>
-    </div>
-    <div class="links">
-      <a href="/">Events</a>
-      <a href="/gallery">Gallery</a>
-      <a href="/outreach">OutReach</a>
-      <a href="/recent">Recent Events</a>
-      <a href="/logout">Log Out as Admin</a>
-    </div>
-  </nav>
+  {%include 'load.html'%}
+   {%include 'nav.html'%}
+   
+   
+<main>
+  
 
   <section id="outreach">
     <div class="container">
@@ -74,6 +68,7 @@
       </div>
     </div>
   </div>
+  </main>
 
 </body>
 </html>
@@ -180,23 +175,24 @@
   oedit.onclick = function(){ EditOutReach("update-outreach", OID) }
   odel.onclick = function(){ Delete_OutReach(OID) }
 
-
-      let routes = {
-        "Events":"/",
-        "Gallery":"/gallery",
-        "OutReach":"/outreach",
-        "Recent Events":"/recent"
-    }
-    let links = document.querySelector(".links")
-    let a = links.querySelectorAll("a")
-
-    a.forEach(as=>{
-        
-            console.log(as.innerText)
-            if(window.location.pathname == routes[as.innerText]){
-                as.style.color = "rgb(245, 7, 7)"
-                
-            }
+ function UserLoading(){
+    fetch("https://acm-backend-admin.vercel.app/api/auth/me" , {
+        method:"GET" , 
+        credentials:"include"
+    }).then(res=>res.json()).then(data=>{
+        if(data.Success===true){
+            document.querySelector(".user-load").style.display = "none"
+            document.querySelector("main").style.display = 'block'
+            LOAD_ALL_OUTREACH()
+        }
+        else{
+            window.location.href = '/acm'
+        }
     })
-  window.addEventListener("DOMContentLoaded",LOAD_ALL_OUTREACH);
+    }
+
+
+
+    
+    window.addEventListener("DOMContentLoaded",UserLoading);
 </script>

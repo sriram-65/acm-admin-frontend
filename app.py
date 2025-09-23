@@ -1,4 +1,4 @@
-from flask import Flask , redirect , render_template , session
+from flask import Flask , redirect , render_template , session , request
 from dotenv import load_dotenv
 import os
 import requests
@@ -25,21 +25,23 @@ Edit_Routes={
 }
 
 def check():
-    res = requests.get(f'{API_URL}/api/auth/me')
-    data = res.json()
-    if(data.Success):
-        return True
-    else:
+    try:
+       
+        res = requests.get(f'{API_URL}/api/auth/me', cookies=request.cookies)
+        data = res.json()
+        if(data.get("Success")):
+            return True
+        else:
+            return False
+    except Exception as e:
+        print("Error in check():", e)
         return False
 
 
 @app.route('/')
 def Home():
-    auth = check()
-    if auth==True:
-        return render_template("main.html"  ,   API = API_URL)
-    else:
-        return redirect("/acm")
+    return render_template("main.html"  ,   API = API_URL)
+   
 
 @app.route("/gallery")
 def Gallery():

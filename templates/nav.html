@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPR@ACM</title>
+  <style>
+    nav {
+      width: 100%;
+      height: 65px;
+      box-shadow: 1px 1px 0px black;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo {
+      margin-left: 20px;
+    }
+    nav .logo a {
+      font-size: 25px;
+      text-decoration: none;
+      color: #01015a;
+      font-weight: 800;
+      font-style: italic;
+    }
+    nav .links {
+      display: flex;
+      gap: 40px;
+      margin-right: 20px;
+    }
+    nav .links a {
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 600;
+      color: #01015a;
+    }
+    nav .links a:hover {
+      color: rgb(245, 7, 7);
+    }
+
+    /* Mobile Section */
+    .links-mobile , .links-n {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+        nav{
+            display: none !important;
+        }
+      nav .links {
+        display: none; /* Hide desktop menu */
+      }
+      .links-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        padding: 10px 20px;
+        box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+      }
+
+      .links-mobile .logo a{
+           font-size: 25px;
+      text-decoration: none;
+      color: #01015a;
+      font-weight: 800;
+      font-style: italic;
+      }
+      .bar {
+        cursor: pointer;
+        font-size: 25px;
+        font-weight: bold;
+      }
+      .links-n {
+        display: none;
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+        background: #f8f8f8;
+      }
+      .links-n a {
+        font-size: 18px;
+        color: #01015a;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .links-n a:hover {
+        color: rgb(245, 7, 7);
+      }
+      .links-n.active {
+        display: flex; 
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+  <nav id="navbar" class="navbar">
+    <div class="logo">
+      <a href="/">NPR@ACM</a>
+    </div>
+    <div class="links">
+      <a href="/">Events</a>
+      <a href="/gallery">Gallery</a>
+      <a href="/outreach">OutReach</a>
+      <a href="/recent">Recent Events</a>
+      <a href="/logout" id="logout">Log Out as Admin</a>
+    </div>
+  </nav>
+
+
+  <div class="links-mobile">
+    <div class="logo">
+      <a href="/">NPR@ACM</a>
+    </div>
+    <div class="bar" id="bar">
+      ☰
+    </div>
+  </div>
+  <div class="links-n" id="mobileLinks">
+    <a href="/">Events</a>
+    <a href="/gallery">Gallery</a>
+    <a href="/outreach">OutReach</a>
+    <a href="/recent">Recent Events</a>
+    <a href="/logout">Log Out as Admin</a>
+  </div>
+
+  <script>
+    const bar = document.getElementById("bar");
+    const mobileLinks = document.getElementById("mobileLinks");
+
+    bar.addEventListener("click", () => {
+      mobileLinks.classList.toggle("active");
+    });
+
+    let routes = {
+        "Events":"/",
+        "Gallery":"/gallery",
+        "OutReach":"/outreach",
+        "Recent Events":"/recent"
+    }
+
+
+    let links = document.querySelector(".links")
+    let a = links.querySelectorAll("a")
+
+    a.forEach(as=>{
+        
+            console.log(as.innerText)
+            if(window.location.pathname == routes[as.innerText]){
+                as.style.color = "rgb(245, 7, 7)"
+                
+            }
+    })
+     
+    let logout = document.getElementById("logout")
+
+    logout.addEventListener("click" , function(e){
+        e.preventDefault()
+        logout.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'
+        fetch("https://acm-backend-admin.vercel.app/api/auth/clear" , {
+            method:"GET",
+            credentials:"include"
+        }).then(res=>res.json()).then(data=>{
+            if(data.Success==true){
+                window.location.href = '/acm'
+            }
+            else{
+                alert("Failed to Logout")
+                // console.log(data)
+                logout.innerHTML = 'Log Out as Admin'
+            }
+        })
+    })
+  </script>
+
+
+</body>
+</html>

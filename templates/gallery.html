@@ -10,19 +10,15 @@
 </head>
 <body>
 
-    <nav id="navbar" class="navbar">
-        <div class="logo">
-            <a href="/">NPR@ACM</a>
-        </div>
-        <div class="links">
-            <a href="/">Events</a>
-            <a href="/gallery">Gallery</a>
-            <a href="/outreach">OutReach</a>
-            <a href="/recent">Recent Events</a>
-            <a href="/logout">Log Out as Admin</a>
-        </div>
-    </nav>
+    {%include 'load.html'%}
+    {%include 'nav.html'%}
+   
 
+
+   
+   <main>
+
+  
     <section id="events">
        <div class="container">
             <div class="main-text">
@@ -82,6 +78,7 @@
             </div>
         </div>
     </div>
+     </main>
 
 </body>
 </html>
@@ -234,31 +231,25 @@
     }
     }
 
-
-    let routes = {
-        "Events":"/",
-        "Gallery":"/gallery",
-        "OutReach":"/outreach",
-        "Recent Events":"/recent"
+  function UserLoading(){
+    fetch("https://acm-backend-admin.vercel.app/api/auth/me" , {
+        method:"GET" , 
+        credentials:"include"
+    }).then(res=>res.json()).then(data=>{
+        if(data.Success===true){
+            document.querySelector(".user-load").style.display = "none"
+            document.querySelector("main").style.display = 'block'
+            Get_Gallerys()
+        }
+        else{
+            window.location.href = '/acm'
+        }
+    })
     }
 
 
-    let links = document.querySelector(".links")
-    let a = links.querySelectorAll("a")
-
-    a.forEach(as=>{
-        
-            console.log(as.innerText)
-            if(window.location.pathname == routes[as.innerText]){
-                as.style.color = "rgb(245, 7, 7)"
-                
-            }
-    })
-
-
 
     
-    
-    window.addEventListener("DOMContentLoaded", Get_Gallerys);
+    window.addEventListener("DOMContentLoaded",UserLoading);
 </script>
 

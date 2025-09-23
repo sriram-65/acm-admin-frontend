@@ -10,31 +10,15 @@
 </head>
 <body>
 
-    <nav id="navbar" class="navbar">
-        <div class="logo">
-            <a href="/">NPR@ACM</a>
-        </div>
-        <div class="links">
-            <a href="/">Events</a>
-            <a href="/gallery">Gallery</a>
-            <a href="/outreach">OutReach</a>
-            <a href="/recent">Recent Events</a>
-            <a href="/logout">Log Out as Admin</a>
-        </div>
-    </nav>
+    {%include 'load.html'%}
+    {%include 'nav.html'%}
+ 
 
-    <div class="links-mobile">
-        <div class="links-n">
-            <a href="/">Events</a>
-            <a href="/gallery">Gallery</a>
-            <a href="/outreach">OutReach</a>
-            <a href="/recent">Recent Events</a>
-            <a href="/logout">Log Out as Admin</a>
-        </div>
-        <div class="bar" id="bar">
-            <h4>+</h4>
-        </div>
-    </div>
+    
+    <main>
+
+    
+  
     
     <section id="events">
        <div class="container">
@@ -95,7 +79,7 @@
             </div>
         </div>
     </div>
-
+</main>
 </body>
 </html>
 
@@ -107,38 +91,7 @@
         font-weight: 400;
         font-style: normal;
     }
-    nav{
-        width:100%;
-        height: 65px;
-        box-shadow: 1px 1px 0px black;
-    }
-    nav .logo{
-        margin-left: 20px;
-    }
-
-    nav .logo a{
-        font-size: 25px;
-        text-decoration: none;
-        color:#01015a;
-        font-weight: 800;
-        font-style: italic;
-    }
-    nav .links{
-        display: flex;
-        gap:40px;
-        margin-right: 20px;
-    }
-
-    nav .links a{
-        text-decoration: none;
-        font-size: 20px;
-        font-weight: 600;
-        color: #01015a;
-    }
-
-    nav .links a:hover{
-        color: rgb(245, 7, 7);
-    }
+    
     #events{
         margin-top: 50px;
     }
@@ -161,32 +114,11 @@
         border-radius: 8px;
         border-left: 4px solid #0d6efd;
     }
-    .links-mobile{
+    main{
         display: none;
     }
-    @media (max-width:800px) {
-        nav .links{
-            display: none;
-        }
-        /* .links-mobile{
-            display: block;
-        }
-        .links-mobile .links-n a{
-            display:none;
-            flex-direction: column;
-            margin: 40px;
-            text-decoration: none;
-    }
-    .links-mobile .bar{
-        position: absolute;
-        right:4%;
-        top:3%;
-        cursor: pointer;
-    }
-    .links-mobile .bar h4{
-        font-size: 28px;
-    } */
-    }
+    
+  
 </style>
 
 <script>
@@ -301,33 +233,26 @@
         Delete_Event(ID)
     }
 
-    let routes = {
-        "Events":"/",
-        "Gallery":"/gallery",
-        "OutReach":"/outreach",
-        "Recent Events":"/recent"
-    }
-
-     let links = document.querySelector(".links")
-    let a = links.querySelectorAll("a")
-
-    a.forEach(as=>{
-            console.log(as.innerText)
-            if(window.location.pathname == routes[as.innerText]){
-                as.style.color = "rgb(245, 7, 7)"
-                
-            }
-    })
-
-
-    let links_n = document.querySelector(".links-n")
-
-    let bar = document.getElementById("bar")
-
-    bar.onclick = function(){
-        links_n.style.display="flex"
-    }
     
-   
-    window.addEventListener("DOMContentLoaded",LOAD_ALL_EVENTS);
+    function UserLoading(){
+    fetch("https://acm-backend-admin.vercel.app/api/auth/me" , {
+        method:"GET" , 
+        credentials:"include"
+    }).then(res=>res.json()).then(data=>{
+        if(data.Success===true){
+            document.querySelector(".user-load").style.display = "none"
+            document.querySelector("main").style.display = 'block'
+            LOAD_ALL_EVENTS()
+        }
+        else{
+            window.location.href = '/acm'
+        }
+    })
+    }
+
+
+
+    
+    window.addEventListener("DOMContentLoaded",UserLoading);
+    
 </script>
